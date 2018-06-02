@@ -75,6 +75,37 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 }
 
 
+///////// added /////////
+pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
+	
+	// define new PointXYZ
+	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+	
+	// loop through all points in depthImage, scale them using focal length
+	for(int i = 0; i < depth_image.cols; i++) {
+		pcl::PointXYZ point;
+	    point.x = depth_image.at<float>(0, i); // use focal_length for scaling
+	    point.y = depth_image.at<float>(1, i); // use focal_length for scaling
+	    point.z = depth_image.at<float>(2, i); // use focal_length for scaling
+  
+	    point_cloud -> points.push_back(point);
+	}
+		
+	point_cloud->width = (int)point_cloud->points.size();
+	point_cloud->height = 1;
+
+	return point_cloud;
+}
+
+pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) {		 
+	return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*point_cloud, *cloud_normals, *model_cloud); 
+	// pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals;
+	// pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
+}
+////////////////////////
+
+
 template<class T>
 typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointCloud<T>::Ptr cloud, const Eigen::Matrix4f& transform) {
     typename pcl::PointCloud<T>::Ptr transformed_cloud(new typename pcl::PointCloud<T>());
@@ -93,8 +124,27 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
         double focalLength = frame.focal_length_;
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
 
-        // TODO(Student): Merge the i-th frame using predicted camera pose
-        // to the global point cloud. ~ 20 lines.
+        // TODO(Student): Merge the i-th frame using predicted camera pose to the global point cloud. ~ 20 lines.
+		
+		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
+		pointCloud = depthToPointCloud(depthImage, focalLength);
+		// depthToPointCloud: input cv::Mat and double; returns PointXYZ
+		
+		// 2. point cloud with normals <- computeNormals(point cloud)
+		cloudNormals = computeNormals(pointCloud);
+		// computeNormals: input PointXYZ; returns PointNormal
+		
+    	// TODO Remove NaN values from the point cloud after computing the surface normals.
+		
+		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
+		cloudNormals = transformPointCloud(cloudNormals, cameraPose); 
+		// transformPointCloud: input PointXYZRGB and Eigen::Matrix4f&; returns PointXYZRGB
+		// TODO: fix correct input / output PointXYZ or PointXYZRGB
+		
+		// 4. model point cloud <- concatPointClouds(model point cloud, point cloud with normals)
+		modelCloud = concatPointClouds(modelCloud, pointCloud, cloudNormals);
+		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
+		// TODO: fix correct input PointXYZ or PointXYZRGB
     }
 
     return modelCloud;
