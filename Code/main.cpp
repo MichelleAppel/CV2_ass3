@@ -88,13 +88,34 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	    point.y = depth_image.at<float>(1, i); // use focal_length for scaling
 	    point.z = depth_image.at<float>(2, i); // use focal_length for scaling
   
-	    point_cloud -> points.push_back(point);
+	    point_cloud->points.push_back(point);
 	}
 		
 	point_cloud->width = (int)point_cloud->points.size();
 	point_cloud->height = 1;
 
 	return point_cloud;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image, double focal_length) {
+	
+	// define new PointXYZRGB
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_rgb(new pcl::PointCloud<pcl::PointXYZRGB>());
+	
+	// loop through all points in depthImage, scale them using focal length
+	for(int i = 0; i < depth_image.cols; i++) {
+		pcl::PointXYZ point;
+	    point.x = depth_image.at<float>(0, i); // use focal_length for scaling
+	    point.y = depth_image.at<float>(1, i); // use focal_length for scaling
+	    point.z = depth_image.at<float>(2, i); // use focal_length for scaling
+  
+	    point_cloud->points.push_back(point);
+	}
+		
+	point_cloud_rgb->width = (int)point_cloud->points.size();
+	point_cloud_rgb->height = 1;
+
+	return point_cloud_rgb;
 }
 
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
@@ -127,22 +148,29 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
         // TODO(Student): Merge the i-th frame using predicted camera pose to the global point cloud. ~ 20 lines.
 		
 		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
+		pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
 		pointCloud = depthToPointCloud(depthImage, focalLength);
 		// depthToPointCloud: input cv::Mat and double; returns PointXYZ
 		
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
+		pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
+		// depthToPointCloud: input cv::Mat and double; returns PointXYZRGB
+		
 		// 2. point cloud with normals <- computeNormals(point cloud)
+	    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
 		cloudNormals = computeNormals(pointCloud);
 		// computeNormals: input PointXYZ; returns PointNormal
 		
     	// TODO Remove NaN values from the point cloud after computing the surface normals.
 		
 		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
-		cloudNormals = transformPointCloud(cloudNormals, cameraPose); 
+	    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
+		pointCloudTrans = transformPointCloud(pointCloudRGB, cameraPose); 
 		// transformPointCloud: input PointXYZRGB and Eigen::Matrix4f&; returns PointXYZRGB
 		// TODO: fix correct input / output PointXYZ or PointXYZRGB
 		
 		// 4. model point cloud <- concatPointClouds(model point cloud, point cloud with normals)
-		modelCloud = concatPointClouds(modelCloud, pointCloud, cloudNormals);
+		modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
 		// TODO: fix correct input PointXYZ or PointXYZRGB
     }
