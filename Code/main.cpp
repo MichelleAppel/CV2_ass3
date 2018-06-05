@@ -83,9 +83,9 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	
 	int rows = depth_image.rows;
 	int cols = depth_image.cols;
-	std::cout << 'DIMENSIONS' << '\n';
-	std::cout << rows << '\n';
-	std::cout << cols << '\n';
+	std::cout << "DIMENSIONS" << "\n";
+	std::cout << rows << "\n";
+	std::cout << cols << "\n";
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
