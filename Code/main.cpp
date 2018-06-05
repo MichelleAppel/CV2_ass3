@@ -28,6 +28,8 @@
 
 #include "Frame3D/Frame3D.h"
 
+#include <typeinfo>
+
 pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_mat, const float focal_length, const float max_depth) {
     // This function converts a depth image to a point cloud
     assert(depth_mat.type() == CV_16U);
@@ -85,6 +87,8 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	
 	//cout << "M = "<< endl << " "  << depth_image << endl << endl;
 	
+	std::cout << typeid(depth_image).name() << '\n';
+	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
 	
@@ -96,7 +100,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	    	point.y = i; // / focal_length; //depth_image.at<float>(i, j)
 	    	point.z = depth_image.at<double>(i, j) / focal_length;
 			
-			cout << depth_image.at<double>(i, j) / focal_length << endl;	
+			//cout << depth_image.at<double>(i, j) / focal_length << endl;	
 			  
 	    	point_cloud->points.push_back(point);
 		}
