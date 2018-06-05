@@ -82,12 +82,15 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 ///////// added /////////
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
 	cout << "depthToPointCloud" << "\n";
-	cout << "focal_length" << "\n";
-	cout << focal_length << "\n";
+	
+	double min, max;
+	cv::minMaxLoc(depth_image, &min, &max);
+	cout << "min" << endl;
+	cout << min << endl;
+	cout << "max" << endl;
+	cout << max << endl;
 	
 	//cout << "M = "<< endl << " "  << depth_image << endl << endl;
-	
-	std::cout << typeid(depth_image).name() << '\n';
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -96,18 +99,18 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	for(int i = 0; i < depth_image.rows; i++) {
 		for(int j = 0; j < depth_image.cols; j++) {
 			pcl::PointXYZ point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j)
+	    	point.x = j / focal_length;
+	    	point.y = i / focal_length;
 	    	point.z = depth_image.at<float>(i, j) / focal_length;
 			
-			cout << depth_image.at<double>(i, j) << endl;
+			//cout << depth_image.at<float>(i, j) << endl;
 			
 	    	point_cloud->points.push_back(point);
 		}
 	}
 		
-	point_cloud->width = (int)depth_image.cols; //(int)point_cloud->points.size();
-	point_cloud->height = (int)depth_image.rows; // 1;
+	point_cloud->width = (int)depth_image.cols;
+	point_cloud->height = (int)depth_image.rows;
 
 	return point_cloud;
 }
@@ -238,6 +241,9 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
+			pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices > & 	polygons 
+			)	
+			
             break;
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
