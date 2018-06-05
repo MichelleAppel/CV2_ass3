@@ -184,8 +184,10 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		// computeNormals: input PointXYZ; returns PointNormal
 		
     	// TODO Remove NaN values from the point cloud after computing the surface normals.
+		
+		// remove NaN points from the point cloud
 		pcl::PointCloud<pcl::PointXYZ>::Ptr outputCloud(new pcl::PointCloud<pcl::PointXYZ>);
-		vector<int> indices;
+	    std::vector<int> indices;
 		pcl::removeNaNFromPointCloud(*pointCloud, *outputCloud, indices);
 		//TODO: test ^
 		
