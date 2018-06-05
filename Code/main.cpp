@@ -102,8 +102,8 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 		}
 	}
 		
-	point_cloud->width = depth_image.cols / focal_length; //(int)point_cloud->points.size();
-	point_cloud->height = depth_image.rows / focal_length; // 1;
+	point_cloud->width = (int)depth_image.cols; // / focal_length; //(int)point_cloud->points.size();
+	point_cloud->height = (int)depth_image.rows; // / focal_length; // 1;
 
 	return point_cloud;
 }
@@ -131,8 +131,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 		}
 	}
 		
-	point_cloud_rgb->width = depth_image.cols / focal_length; //(int)point_cloud_rgb->points.size();
-	point_cloud_rgb->height = depth_image.rows / focal_length; // 1;
+	point_cloud_rgb->width = (int)depth_image.cols; // / focal_length; //(int)point_cloud_rgb->points.size();
+	point_cloud_rgb->height = (int)depth_image.rows; // / focal_length; // 1;
 
 	return point_cloud_rgb;
 }
