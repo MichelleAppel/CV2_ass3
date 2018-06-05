@@ -159,38 +159,35 @@ typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointC
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]) {
     pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr modelCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 8; i++) {
         std::cout << boost::format("Merging frame %d") % i << std::endl;
 
         Frame3D frame = frames[i];
         cv::Mat depthImage = frame.depth_image_;
         double focalLength = frame.focal_length_;
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
+		float threshold = 1.5;
 
         // TODO(Student): Merge the i-th frame using predicted camera pose to the global point cloud. ~ 20 lines.
 		
 		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
 		pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
-		// pointCloud = depthToPointCloud(depthImage, focalLength);
-		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, 1.5);
-		
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
+		//pointCloud = depthToPointCloud(depthImage, focalLength);
 		//pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
-		// depthToPointCloud: input cv::Mat and double; returns PointXYZRGB
+		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, threshold);
 		pcl::copyPointCloud(*pointCloud, *pointCloudRGB);
+		// depthToPointCloud: input cv::Mat and double; returns PointXYZRGB
 		
 		// 2. point cloud with normals <- computeNormals(point cloud)
 	    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
 		cloudNormals = computeNormals(pointCloud);
 		// computeNormals: input PointXYZ; returns PointNormal
-		
-    	// TODO Remove NaN values from the point cloud after computing the surface normals.
-		
+				
 		// remove NaN points from the point cloud
 		pcl::PointCloud<pcl::PointXYZ>::Ptr outputCloud(new pcl::PointCloud<pcl::PointXYZ>);
 	    std::vector<int> indices;
 		pcl::removeNaNFromPointCloud(*pointCloud, *outputCloud, indices);
-		//TODO: test ^
 		
 		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
 	    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
@@ -201,6 +198,9 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, *cloudNormals, *modelCloud);
 		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
+		
+		//*cloud_together = *cloud_horizontal;
+		//*cloud_together += *cloud_vertical;
     }
     return modelCloud;
 }
@@ -218,6 +218,11 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointCloudsWithTexture(Frame
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
 
         // TODO(Student): The same as mergingPointClouds but now with texturing. ~ 50 lines.
+		
+		//pointCloudTrans = transformPointCloud(modelCloud, cameraPose.inverse()); 
+		//for (int i = 0; i < ; i++) {			
+		//}
+		
     }
 
     return modelCloud;
