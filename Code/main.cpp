@@ -97,7 +97,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	    	point.y = i / focal_length; //depth_image.at<float>(i, j)
 	    	point.z = depth_image.at<float>(i, j);
 			
-			cout << depth_image.at<float>(i, j) << endl;	
+			cout << depth_image.at<int>(i, j) << endl;	
 			  
 	    	point_cloud->points.push_back(point);
 		}
