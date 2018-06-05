@@ -81,28 +81,28 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
 	cout << "depthToPointCloud" << "\n";
 	
-	int rows = depth_image.rows;
-	int cols = depth_image.cols;
-	std::cout << "DIMENSIONS" << "\n";
-	std::cout << rows << "\n";
-	std::cout << cols << "\n";
+	//int rows = depth_image.rows;
+	//int cols = depth_image.cols;
+	//std::cout << "DIMENSIONS" << "\n";
+	//std::cout << rows << "\n";
+	//std::cout << cols << "\n";
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
 	
 	// loop through all points in depthImage, scale them using focal length
-	// TODO: loop through the rows?
-	for(int i = 0; i < depth_image.cols; i++) {
-		pcl::PointXYZ point;
-	    point.x = depth_image.at<float>(0, i) / focal_length; // use focal_length for scaling
-	    point.y = depth_image.at<float>(1, i) / focal_length; // use focal_length for scaling
-	    point.z = depth_image.at<float>(2, i) / focal_length; // use focal_length for scaling
+	for(int i = 0; i < depth_image.rows; i++) {
+		for(int j = 0; j < depth_image.cols; j++) {
+			pcl::PointXYZ point;
+	    	point.x = j / focal_length; //depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
+	    	point.y = i / focal_length; //depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
+	    	point.z = depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
   
-	    point_cloud->points.push_back(point);
+	    	point_cloud->points.push_back(point);
 	}
 		
-	point_cloud->width = (int)point_cloud->points.size();
-	point_cloud->height = 1;
+	point_cloud->width = depth_image.cols / focal_length; //(int)point_cloud->points.size();
+	point_cloud->height = depth_image.rows / focal_length; // 1;
 
 	return point_cloud;
 }
@@ -116,21 +116,21 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 	char pr=100, pg=100, pb=100;
 	
 	// loop through all points in depthImage, scale them using focal length
-	for(int i = 0; i < depth_image.cols; i++) {
-		pcl::PointXYZRGB point;
-	    point.x = depth_image.at<float>(0, i) / focal_length; // use focal_length for scaling
-	    point.y = depth_image.at<float>(1, i) / focal_length; // use focal_length for scaling
-	    point.z = depth_image.at<float>(2, i) / focal_length; // use focal_length for scaling
-  
-		// add color
-        uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
-		point.rgb = *reinterpret_cast<float*>(&rgb);
-  
-	    point_cloud_rgb->points.push_back(point);
+	for(int i = 0; i < depth_image.rows; i++) {
+		for(int j = 0; j < depth_image.cols; j++) {
+			pcl::PointXYZ point;
+	    	point.x = j / focal_length; //depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
+	    	point.y = i / focal_length; //depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
+	    	point.z = depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
+    
+			// add color
+        	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
+			//point.rgb = *reinterpret_cast<float*>(&rgb);
+	    	point_cloud_rgb->points.push_back(point);
 	}
 		
-	point_cloud_rgb->width = (int)point_cloud_rgb->points.size();
-	point_cloud_rgb->height = 1;
+	point_cloud_rgb->width = depth_image.cols / focal_length; //(int)point_cloud_rgb->points.size();
+	point_cloud_rgb->height = depth_image.rows / focal_length; // 1;
 
 	return point_cloud_rgb;
 }
