@@ -81,11 +81,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
 	cout << "depthToPointCloud" << "\n";
 	
-	// Print the size of the depth_image matrix
-	cv::Size s = depth_image.size();
-	std::string h = std::to_string(s.height);
-	std::string w = std::to_string(s.width);
-    printf("Characters: rows: %c    cols: %c \n", h, w);
+	int rows = depth_image.rows;
+	int cols = depth_image.cols;
+	//std::string h = std::to_string(s.height);
+	//std::string w = std::to_string(s.width);
+    printf("Characters: rows: %c    cols: %c \n", rows, cols);
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
