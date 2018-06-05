@@ -83,8 +83,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	cout << "focal_length" << "\n";
 	cout << focal_length << "\n";
 	
-	int count = 0;
-		
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
 	
@@ -92,21 +90,13 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	for(int i = 0; i < depth_image.rows; i++) {
 		for(int j = 0; j < depth_image.cols; j++) {
 			pcl::PointXYZ point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j)
+	    	point.x = j; //depth_image.at<float>(i, j);
+	    	point.y = i; //depth_image.at<float>(i, j)
 	    	point.z = depth_image.at<float>(i, j);
-			
-			if (point.z > 0) {
-				count ++;
-			}
-			
-  
+			  
 	    	point_cloud->points.push_back(point);
 		}
 	}
-	
-	cout << "amount of positive z" << "\n";
-	cout << count << "\n";
 		
 	point_cloud->width = (int)depth_image.cols; // / focal_length; //(int)point_cloud->points.size();
 	point_cloud->height = (int)depth_image.rows; // / focal_length; // 1;
@@ -126,8 +116,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 	for(int i = 0; i < depth_image.rows; i++) {
 		for(int j = 0; j < depth_image.cols; j++) {
 			pcl::PointXYZRGB point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j);
+	    	point.x = j; //depth_image.at<float>(i, j);
+	    	point.y = i; //depth_image.at<float>(i, j);
 	    	point.z = depth_image.at<float>(i, j);
     
 			// add color
