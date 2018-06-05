@@ -83,6 +83,9 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	cout << "focal_length" << "\n";
 	cout << focal_length << "\n";
 	
+	cout << "M = "<< endl << " "  << depth_image << endl << endl;
+	
+	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
 	
