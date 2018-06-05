@@ -81,15 +81,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 
 ///////// added /////////
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
-	cout << "depthToPointCloud" << "\n";
-	
-	double min, max;
-	cv::minMaxLoc(depth_image, &min, &max);
-	cout << "min" << endl;
-	cout << min << endl;
-	cout << "max" << endl;
-	cout << max << endl;
-	
+	cout << "depthToPointCloud" << "\n";	
 	//cout << "M = "<< endl << " "  << depth_image << endl << endl;
 	
 	// define new PointXYZ
@@ -180,7 +172,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
 		pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
 		// pointCloud = depthToPointCloud(depthImage, focalLength);
-		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, 3000);
+		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, 10000);
 		
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
 		//pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
