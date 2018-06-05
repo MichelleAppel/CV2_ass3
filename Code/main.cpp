@@ -201,7 +201,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::concatenateFields(*pointCloudTrans, *cloudNormals, *cloudWithNormals);
 		//* cloud_with_normals = cloud + normals
 		
-		modelCloud += cloudWithNormals;
+		*modelCloud += *cloudWithNormals;
 		//pcl::concatenatePointCloud(*modelCloud, *cloudWithNormals, *modelCloud);
 		
 		//pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, *cloudNormals, *modelCloud);
