@@ -172,7 +172,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
 		pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
 		// pointCloud = depthToPointCloud(depthImage, focalLength);
-		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, 2.5);
+		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, 0.5);
 		
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
 		//pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
