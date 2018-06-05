@@ -188,6 +188,9 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::PointCloud<pcl::PointXYZ>::Ptr outputCloud(new pcl::PointCloud<pcl::PointXYZ>);
 	    std::vector<int> indices;
 		pcl::removeNaNFromPointCloud(*pointCloud, *outputCloud, indices);
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr outputCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>);
+	    std::vector<int> indicesRGB;
+		pcl::removeNaNFromPointCloud(*pointCloudRGB, *outputCloudRGB, indicesRGB);
 		
 		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
 	    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
