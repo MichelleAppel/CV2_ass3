@@ -94,7 +94,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 			pcl::PointXYZ point;
 	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
 	    	point.y = i / focal_length; //depth_image.at<float>(i, j)
-	    	point.z = depth_image.at<float>(i, j) / focal_length;
+	    	point.z = depth_image.at<float>(i, j);
 			
 			if (point.z > 0) {
 				count ++;
@@ -128,7 +128,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 			pcl::PointXYZRGB point;
 	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
 	    	point.y = i / focal_length; //depth_image.at<float>(i, j);
-	    	point.z = depth_image.at<float>(i, j) / focal_length;
+	    	point.z = depth_image.at<float>(i, j);
     
 			// add color
         	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
