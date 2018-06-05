@@ -131,8 +131,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) {		 
-	//return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*point_cloud, *cloud_normals, *model_cloud);
-	return pcl::concatenateFields(point_cloud, cloud_normals, model_cloud); 
+	return 0 //return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(point_cloud, cloud_normals, model_cloud);
+	
+	//return pcl::concatenateFields(point_cloud, cloud_normals, model_cloud); 
 	// pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals;
 	// pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
 	
@@ -189,7 +190,9 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		// TODO: fix correct input / output PointXYZ or PointXYZRGB
 		
 		// 4. model point cloud <- concatPointClouds(model point cloud, point cloud with normals)
-		modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
+		pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(pointCloudTrans, cloudNormals, modelCloud);
+		
+		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
 		// TODO: fix correct input PointXYZ or PointXYZRGB
     }
