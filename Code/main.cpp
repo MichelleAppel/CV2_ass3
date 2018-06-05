@@ -125,8 +125,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 	    	point.z = depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
     
 			// add color
-        	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
-			//point.rgb = *reinterpret_cast<float*>(&rgb);
+        	uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
+			point.rgb = *reinterpret_cast<float*>(&rgb);
 	    	point_cloud_rgb->points.push_back(point);
 		}
 	}
