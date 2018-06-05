@@ -55,7 +55,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_
 
 
 pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
-	cout << someString << "computeNormals\n";
+	cout << "computeNormals" << "\n";
     // This function computes normals given a point cloud
     // !! Please note that you should remove NaN values from the pointcloud after computing the surface normals.
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals(new pcl::PointCloud<pcl::PointNormal>); // Output datasets
@@ -70,7 +70,7 @@ pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::Point
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const Eigen::Matrix4f& transform) {
-	cout << someString << "transformPointCloud\n";
+	cout << "transformPointCloud" << "\n";
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::transformPointCloud(*cloud, *transformed_cloud, transform);
     return transformed_cloud;
@@ -79,7 +79,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 
 ///////// added /////////
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
-	cout << someString << "depthToPointCloud\n";
+	cout << "depthToPointCloud" << "\n";
 	
 	// Print the size of the depth_image matrix
 	cv::Size s = depth_image.size();
@@ -108,7 +108,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image, double focal_length) {
-	cout << someString << "depthToPointCloudRGB\n";
+	cout << "depthToPointCloudRGB" << "\n";
 	
 	// define new PointXYZRGB
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_rgb(new pcl::PointCloud<pcl::PointXYZRGB>());
