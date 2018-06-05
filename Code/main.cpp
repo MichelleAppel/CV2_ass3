@@ -55,6 +55,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_
 
 
 pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
+	cout << someString << "computeNormals\n";
     // This function computes normals given a point cloud
     // !! Please note that you should remove NaN values from the pointcloud after computing the surface normals.
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals(new pcl::PointCloud<pcl::PointNormal>); // Output datasets
@@ -69,6 +70,7 @@ pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::Point
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const Eigen::Matrix4f& transform) {
+	cout << someString << "transformPointCloud\n";
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::transformPointCloud(*cloud, *transformed_cloud, transform);
     return transformed_cloud;
@@ -77,10 +79,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 
 ///////// added /////////
 pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
+	cout << someString << "depthToPointCloud\n";
 	
 	// Print the size of the depth_image matrix
 	cv::Size s = depth_image.size();
-    printf("Characters: rows: %c    cols: %c \n", s.height, s.width);
+	std::string h = std::to_string(s.height);
+	std::string w = std::to_string(s.width);
+    printf("Characters: rows: %c    cols: %c \n", h, w);
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -103,6 +108,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image, double focal_length) {
+	cout << someString << "depthToPointCloudRGB\n";
 	
 	// define new PointXYZRGB
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_rgb(new pcl::PointCloud<pcl::PointXYZRGB>());
@@ -130,20 +136,14 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 }
 
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
-		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) {		 
-	return 0; //return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(point_cloud, cloud_normals, model_cloud);
-	
-	//return pcl::concatenateFields(point_cloud, cloud_normals, model_cloud); 
-	// pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals;
-	// pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) { 
+	return 0;
+	//return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(point_cloud, cloud_normals, model_cloud);
 	
 	//model_cloud		PointXYZRGBNormal
     //point_cloud		PointXYZRGB
 	//cloud_normals	PointNormal
 	//return PointXYZRGBNormal
-		
-	
-		
 }
 ////////////////////////
 
