@@ -92,11 +92,11 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	for(int i = 0; i < depth_image.rows; i++) {
 		for(int j = 0; j < depth_image.cols; j++) {
 			pcl::PointXYZ point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j)
-	    	point.z = depth_image.at<int>(i, j);
+	    	point.x = j; // / focal_length; //depth_image.at<float>(i, j);
+	    	point.y = i; // / focal_length; //depth_image.at<float>(i, j)
+	    	point.z = depth_image.at<int>(i, j) / focal_length;
 			
-			cout << depth_image.at<int>(i, j) << endl;	
+			cout << depth_image.at<int>(i, j) / focal_length << endl;	
 			  
 	    	point_cloud->points.push_back(point);
 		}
@@ -120,9 +120,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 	for(int i = 0; i < depth_image.rows; i++) {
 		for(int j = 0; j < depth_image.cols; j++) {
 			pcl::PointXYZRGB point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j);
-	    	point.z = depth_image.at<int>(i, j);
+	    	point.x = j; // / focal_length; //depth_image.at<float>(i, j);
+	    	point.y = i; // / focal_length; //depth_image.at<float>(i, j);
+	    	point.z = depth_image.at<int>(i, j) / focal_length;
     
 			// add color
         	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
