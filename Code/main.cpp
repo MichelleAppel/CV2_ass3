@@ -190,8 +190,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		// TODO: fix correct input / output PointXYZ or PointXYZRGB
 		
 		// 4. model point cloud <- concatPointClouds(model point cloud, point cloud with normals)
-		pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(pointCloudTrans, cloudNormals, modelCloud);
-		
+		pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, *cloudNormals, *modelCloud);
 		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
 		// TODO: fix correct input PointXYZ or PointXYZRGB
