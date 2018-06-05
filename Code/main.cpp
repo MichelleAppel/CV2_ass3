@@ -166,7 +166,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
         cv::Mat depthImage = frame.depth_image_;
         double focalLength = frame.focal_length_;
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
-		float threshold = 1.5;
+		float threshold = 1;
 
         // TODO(Student): Merge the i-th frame using predicted camera pose to the global point cloud. ~ 20 lines.
 		
