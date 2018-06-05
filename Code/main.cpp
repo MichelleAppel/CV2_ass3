@@ -185,7 +185,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
 		//pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
 		// depthToPointCloud: input cv::Mat and double; returns PointXYZRGB
-		pcl::copyPointCloud(pointCloud, pointCloudRGB);
+		pcl::copyPointCloud(*pointCloud, *pointCloudRGB);
 		
 		// 2. point cloud with normals <- computeNormals(point cloud)
 	    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
