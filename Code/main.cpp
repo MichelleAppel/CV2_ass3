@@ -243,8 +243,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
-			pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices > & 	polygons 
-			)	
+			///pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
 			
             break;
         case MarchingCubes:
