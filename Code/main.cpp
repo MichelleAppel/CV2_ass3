@@ -159,7 +159,7 @@ typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointC
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]) {
     pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr modelCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 2; i++) {
         std::cout << boost::format("Merging frame %d") % i << std::endl;
 
         Frame3D frame = frames[i];
@@ -199,6 +199,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
 		
+	    //pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatenation(new pcl::PointCloud<pcl::PointXYZRGBNormal>);	
 		//*cloud_together = *cloud_horizontal;
 		//*cloud_together += *cloud_vertical;
     }
