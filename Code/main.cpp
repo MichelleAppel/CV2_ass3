@@ -131,9 +131,18 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) {		 
-	return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*point_cloud, *cloud_normals, *model_cloud); 
+	//return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*point_cloud, *cloud_normals, *model_cloud);
+	return pcl::concatenateFields(*point_cloud, *cloud_normals, *model_cloud); 
 	// pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals;
 	// pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
+	
+	//model_cloud		PointXYZRGBNormal
+    //point_cloud		PointXYZRGB
+	//cloud_normals	PointNormal
+	//return PointXYZRGBNormal
+		
+	
+		
 }
 ////////////////////////
 
