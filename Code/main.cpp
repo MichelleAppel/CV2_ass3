@@ -99,6 +99,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	    	point.z = depth_image.at<float>(i, j) / focal_length; // use focal_length for scaling
   
 	    	point_cloud->points.push_back(point);
+		}
 	}
 		
 	point_cloud->width = depth_image.cols / focal_length; //(int)point_cloud->points.size();
@@ -127,6 +128,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
         	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
 			//point.rgb = *reinterpret_cast<float*>(&rgb);
 	    	point_cloud_rgb->points.push_back(point);
+		}
 	}
 		
 	point_cloud_rgb->width = depth_image.cols / focal_length; //(int)point_cloud_rgb->points.size();
