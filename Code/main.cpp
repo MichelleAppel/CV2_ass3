@@ -80,9 +80,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, doubl
 	
 	// Print the size of the depth_image matrix
 	cv::Size s = depth_image.size();
-	rows = s.height;
-	cols = s.width;
-    printf("Characters: rows: %c    cols: %c \n", rows, cols);
+    printf("Characters: rows: %c    cols: %c \n", s.height, s.width);
 	
 	// define new PointXYZ
 	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -113,7 +111,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
 	
 	// loop through all points in depthImage, scale them using focal length
 	for(int i = 0; i < depth_image.cols; i++) {
-		pcl::PointXYZ point;
+		pcl::PointXYZRGB point;
 	    point.x = depth_image.at<float>(0, i) / focal_length; // use focal_length for scaling
 	    point.y = depth_image.at<float>(1, i) / focal_length; // use focal_length for scaling
 	    point.z = depth_image.at<float>(2, i) / focal_length; // use focal_length for scaling
@@ -122,10 +120,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image,
         uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
 		point.rgb = *reinterpret_cast<float*>(&rgb);
   
-	    point_cloud->points.push_back(point);
+	    point_cloud_rgb->points.push_back(point);
 	}
 		
-	point_cloud_rgb->width = (int)point_cloud->points.size();
+	point_cloud_rgb->width = (int)point_cloud_rgb->points.size();
 	point_cloud_rgb->height = 1;
 
 	return point_cloud_rgb;
