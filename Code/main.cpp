@@ -213,7 +213,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//*modelCloud += *cloudWithNormals;
 		
 		// Pass filtered result to transformPointCloudNormals()
-		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud = transformPointCloudNormals(cloudNormals, cameraPose);
+		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud = transformPointCloudNormals(filteredCloudNormals, cameraPose);
 		pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr copiedCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 		pcl::copyPointCloud(*newPointCloud, *copiedCloud);
 		*modelCloud += *copiedCloud;
