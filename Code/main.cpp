@@ -143,8 +143,8 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<p
 	
 	//model_cloud		PointXYZRGBNormal
     //point_cloud		PointXYZRGB
-	//cloud_normals	PointNormal
-	//return PointXYZRGBNormal
+	//cloud_normals		PointNormal
+	//return 	PointXYZRGBNormal
 }
 ////////////////////////
 
@@ -193,27 +193,31 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::removeNaNFromPointCloud(*pointCloudRGB, *outputCloudRGB, indicesRGB);
 		
 		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
-	    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
-		pointCloudTrans = transformPointCloud(pointCloudRGB, cameraPose); 
+	    //pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
+		//pointCloudTrans = transformPointCloud(pointCloudRGB, cameraPose); 
 		// transformPointCloud: input PointXYZRGB and Eigen::Matrix4f&; returns PointXYZRGB
 		
 		// 4. model point cloud <- concatPointClouds(model point cloud, point cloud with normals)
-		
-		// Concatenate the XYZ and normal fields*
-		pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloudWithNormals(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
-		pcl::concatenateFields(*pointCloudTrans, *cloudNormals, *cloudWithNormals);
-		//* cloud_with_normals = cloud + normals
-		
+		//pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloudWithNormals(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
+		//pcl::concatenateFields(*pointCloudTrans, *cloudNormals, *cloudWithNormals);
+		////* cloudWithNormals = pointCloudTrans + cloudNormals
+				
+				
+				
+		pcl::PointCloud<T>Ptr newPointCloud(new pcl::PointCloud<T>);
+		newPointCloud = transformPointCloudNormals(pointCloudRGB, cameraPose)
+		*modelCloud += *newPointCloud;
+						
+				
+		//PointNormal = pcl::PointCloud<T>::Ptr transformPointCloudNormals()
+		//Copy PointNormal into var
+		//Add var to modelcloud
+					
 		*modelCloud += *cloudWithNormals;
 		//pcl::concatenatePointCloud(*modelCloud, *cloudWithNormals, *modelCloud);
-		
-		//pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, *cloudNormals, *modelCloud);
+		//pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, 		*cloudNormals, *modelCloud);
 		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
 		// concatPointClouds: input PointXYZRGBNormal, PointXYZRGB, and PointNormal; returns PointXYZRGBNormal
-		
-	    //pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatenation(new pcl::PointCloud<pcl::PointXYZRGBNormal>);	
-		//*cloud_together = *cloud_horizontal;
-		//*cloud_together += *cloud_vertical;
     }
     return modelCloud;
 }
@@ -253,15 +257,15 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
-			///pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
-			//pcl::Poisson<pcl::PointNormal> poisson;
-			//poisson.setDepth(8);
-			//poisson.setSolverDivide(8);
-			//poisson.setIsoDivide(8);
-			//poisson.setPointWeight(4.0f);
-			//poisson.setInputCloud(npc);
-			//poisson.reconstruct(triangles);
-            
+			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
+			pcl::Poisson<pcl::PointNormal> poisson;
+			poisson.setDepth(8);
+			poisson.setSolverDivide(8);
+			poisson.setIsoDivide(8);
+			poisson.setPointWeight(4.0f);
+			poisson.setInputCloud(npc);
+			poisson.reconstruct(triangles);
+			            
 			break;
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
