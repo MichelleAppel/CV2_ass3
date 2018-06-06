@@ -204,13 +204,15 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			
 			//pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
 		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);
-		  	
+			pcl::Poisson<pcl::PointNormal>::Ptr cloudNormals(pcl::Poisson<pcl::PointNormal>);
+        	pcl::copyPointCloud<PointXYZRGBNormal, PointNormal>(*pointCloud, *cloudNormals);
+			
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
 			poisson.setSolverDivide(8);
 			poisson.setIsoDivide(8);
 			poisson.setPointWeight(4.0f);
-			poisson.setInputCloud(pointCloud);
+			poisson.setInputCloud(cloudNormals);
 			poisson.reconstruct(triangles);
 			            
 			break;
