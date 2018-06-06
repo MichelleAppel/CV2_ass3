@@ -206,7 +206,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);  
 		  
 			pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
-        	pcl::copyPointCloud(*pointCloud, *cloudNormals);
+        	pcl::copyPointCloud<pcl::PointXYZRGBNormal, pcl::PointNormal>(*pointCloud, *cloudNormals);
 			
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
