@@ -201,13 +201,17 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
 			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
-			//pcl::Poisson<pcl::PointNormal> poisson;
-			//poisson.setDepth(8);
-			//poisson.setSolverDivide(8);
-			//poisson.setIsoDivide(8);
-			//poisson.setPointWeight(4.0f);
-			//poisson.setInputCloud(npc);
-			//poisson.reconstruct(triangles);
+			
+			PointCloud<PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<PointNormal> ());
+		  	fromPCLPointCloud2 (*pointCloud, *xyz_cloud);
+		  	
+			pcl::Poisson<pcl::PointNormal> poisson;
+			poisson.setDepth(8);
+			poisson.setSolverDivide(8);
+			poisson.setIsoDivide(8);
+			poisson.setPointWeight(4.0f);
+			poisson.setInputCloud(xyz_cloud);
+			poisson.reconstruct(triangles);
 			            
 			break;
         case MarchingCubes:
