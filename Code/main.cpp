@@ -202,7 +202,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
 			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
 			
-			pcl::PointCloud<PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
+			pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
 		  	pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);
 		  	
 			pcl::Poisson<pcl::PointNormal> poisson;
