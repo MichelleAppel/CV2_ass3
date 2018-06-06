@@ -31,6 +31,7 @@
 #include <typeinfo>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_mat, const float focal_length, const float max_depth) {
+	cout << "mat2IntegralPointCloud" << "\n";
     // This function converts a depth image to a point cloud
     assert(depth_mat.type() == CV_16U);
     pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -80,6 +81,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 
 template<class T>
 typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointCloud<T>::Ptr cloud, const Eigen::Matrix4f& transform) {
+	cout << "transformPointCloudNormals" << "\n";
     typename pcl::PointCloud<T>::Ptr transformed_cloud(new typename pcl::PointCloud<T>());
     pcl::transformPointCloudWithNormals(*cloud, *transformed_cloud, transform);
     return transformed_cloud;
@@ -113,12 +115,10 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		cloudNormals = computeNormals(pointCloud);
 		// computeNormals: input PointXYZ; returns PointNormal
 		
-		// Copy and remove NaNs from normals
-		pcl::PointCloud<pcl::PointNormal>::Ptr copyCloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+		// Remove NaNs from normals
 	    pcl::PointCloud<pcl::PointNormal>::Ptr filteredCloudNormals(new pcl::PointCloud<pcl::PointNormal>);
-		pcl::copyPointCloud(*cloudNormals, *copyCloudNormals);
 	    std::vector<int> indices;
-		pcl::removeNaNFromPointCloud(*copyCloudNormals, *filteredCloudNormals, indices);
+		pcl::removeNaNFromPointCloud(*cloudNormals, *filteredCloudNormals, indices);
 		
 		// OLD CODE		
 		// remove NaN points from the point cloud
@@ -176,6 +176,10 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointCloudsWithTexture(Frame
 		//pointCloudTrans = transformPointCloud(modelCloud, cameraPose.inverse()); 
 		//for (int i = 0; i < ; i++) {			
 		//}
+		
+		
+		// TODO: Make sure u,v coordinates are scaled to be from [0, width] and [0, height] but not [0, 1].
+		// TODO: Make sure you rotate a model back to camera coordinate system using a provided pose.
 		
     }
 
