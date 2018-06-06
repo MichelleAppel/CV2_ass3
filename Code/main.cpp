@@ -203,8 +203,9 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
 			
 			//pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
-		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);
-			pcl::Poisson<pcl::PointNormal>::Ptr cloudNormals(pcl::Poisson<pcl::PointNormal>);
+		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);  
+		  
+			pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
         	pcl::copyPointCloud(*pointCloud, *cloudNormals);
 			
 			pcl::Poisson<pcl::PointNormal> poisson;
