@@ -201,11 +201,12 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloudWithNormals(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 		//pcl::concatenateFields(*pointCloudTrans, *cloudNormals, *cloudWithNormals);
 		////* cloudWithNormals = pointCloudTrans + cloudNormals
+		//*modelCloud += *cloudWithNormals;
 				
 				
 				
 		pcl::PointCloud<T>Ptr newPointCloud(new pcl::PointCloud<T>);
-		newPointCloud = transformPointCloudNormals(pointCloudRGB, cameraPose)
+		newPointCloud = transformPointCloudNormals(pointCloudRGB, cameraPose);
 		*modelCloud += *newPointCloud;
 						
 				
@@ -213,7 +214,6 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//Copy PointNormal into var
 		//Add var to modelcloud
 					
-		*modelCloud += *cloudWithNormals;
 		//pcl::concatenatePointCloud(*modelCloud, *cloudWithNormals, *modelCloud);
 		//pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(*pointCloudTrans, 		*cloudNormals, *modelCloud);
 		//modelCloud = concatPointClouds(modelCloud, pointCloudTrans, cloudNormals);
@@ -258,13 +258,13 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
 			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
-			pcl::Poisson<pcl::PointNormal> poisson;
-			poisson.setDepth(8);
-			poisson.setSolverDivide(8);
-			poisson.setIsoDivide(8);
-			poisson.setPointWeight(4.0f);
-			poisson.setInputCloud(npc);
-			poisson.reconstruct(triangles);
+			//pcl::Poisson<pcl::PointNormal> poisson;
+			//poisson.setDepth(8);
+			//poisson.setSolverDivide(8);
+			//poisson.setIsoDivide(8);
+			//poisson.setPointWeight(4.0f);
+			//poisson.setInputCloud(npc);
+			//poisson.reconstruct(triangles);
 			            
 			break;
         case MarchingCubes:
