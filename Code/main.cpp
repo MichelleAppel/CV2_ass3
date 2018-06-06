@@ -183,14 +183,23 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 	    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
 		cloudNormals = computeNormals(pointCloud);
 		// computeNormals: input PointXYZ; returns PointNormal
-				
-		// remove NaN points from the point cloud
-		pcl::PointCloud<pcl::PointXYZ>::Ptr outputCloud(new pcl::PointCloud<pcl::PointXYZ>);
+		
+		// Copy and remove NaNs from normals
+		pcl::PointCloud<pcl::PointNormal>::Ptr copyCloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+	    pcl::PointCloud<pcl::PointNormal>::Ptr filteredCloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+		pcl::copyPointCloud(*cloudNormals, *copyCloudNormals);
 	    std::vector<int> indices;
-		pcl::removeNaNFromPointCloud(*pointCloud, *outputCloud, indices);
-		pcl::PointCloud<pcl::PointXYZRGB>::Ptr outputCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>);
-	    std::vector<int> indicesRGB;
-		pcl::removeNaNFromPointCloud(*pointCloudRGB, *outputCloudRGB, indicesRGB);
+		pcl::removeNaNFromPointCloud(*copyCloudNormals, *filteredCloudNormals, indices);
+	
+		
+		// OLD CODE		
+		// remove NaN points from the point cloud
+		//pcl::PointCloud<pcl::PointXYZ>::Ptr outputCloud(new pcl::PointCloud<pcl::PointXYZ>);
+	    //std::vector<int> indices;
+		//pcl::removeNaNFromPointCloud(*pointCloud, *outputCloud, indices);
+		//pcl::PointCloud<pcl::PointXYZRGB>::Ptr outputCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>);
+	    //std::vector<int> indicesRGB;
+		//pcl::removeNaNFromPointCloud(*pointCloudRGB, *outputCloudRGB, indicesRGB);
 		
 		// 3. point cloud with normals <- transformPointCloud(point cloud with normals, camera pose)
 	    //pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudTrans(new pcl::PointCloud<pcl::PointXYZRGB>());
@@ -202,8 +211,9 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//pcl::concatenateFields(*pointCloudTrans, *cloudNormals, *cloudWithNormals);
 		////* cloudWithNormals = pointCloudTrans + cloudNormals
 		//*modelCloud += *cloudWithNormals;
-						
-		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud = transformPointCloudNormals(pointCloudRGB, cameraPose);
+		
+		// Pass filtered result to transformPointCloudNormals()
+		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud = transformPointCloudNormals(cloudNormals, cameraPose);
 		pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr copiedCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 		pcl::copyPointCloud(*newPointCloud, *copiedCloud);
 		*modelCloud += *copiedCloud;
