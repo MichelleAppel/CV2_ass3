@@ -78,77 +78,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
     return transformed_cloud;
 }
 
-
-///////// added /////////
-pcl::PointCloud<pcl::PointXYZ>::Ptr depthToPointCloud(cv::Mat depth_image, double focal_length) {
-	cout << "depthToPointCloud" << "\n";	
-	//cout << "M = "<< endl << " "  << depth_image << endl << endl;
-	
-	// define new PointXYZ
-	pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
-	
-	// loop through all points in depthImage, scale them using focal length
-	for(int i = 0; i < depth_image.rows; i++) {
-		for(int j = 0; j < depth_image.cols; j++) {
-			pcl::PointXYZ point;
-	    	point.x = j / focal_length;
-	    	point.y = i / focal_length;
-	    	point.z = depth_image.at<float>(i, j) / focal_length;
-			
-			//cout << depth_image.at<float>(i, j) << endl;
-			
-	    	point_cloud->points.push_back(point);
-		}
-	}
-		
-	point_cloud->width = (int)depth_image.cols;
-	point_cloud->height = (int)depth_image.rows;
-
-	return point_cloud;
-}
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr depthToPointCloudRGB(cv::Mat depth_image, double focal_length) {
-	cout << "depthToPointCloudRGB" << "\n";
-	
-	// define new PointXYZRGB
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_rgb(new pcl::PointCloud<pcl::PointXYZRGB>());
-	
-	char pr=100, pg=100, pb=100;
-	
-	// loop through all points in depthImage, scale them using focal length
-	for(int i = 0; i < depth_image.rows; i++) {
-		for(int j = 0; j < depth_image.cols; j++) {
-			pcl::PointXYZRGB point;
-	    	point.x = j / focal_length; //depth_image.at<float>(i, j);
-	    	point.y = i / focal_length; //depth_image.at<float>(i, j);
-	    	point.z = depth_image.at<int>(i, j) / focal_length;
-    
-			// add color
-        	//uint32_t rgb = (static_cast<uint32_t>(pr) << 16 | static_cast<uint32_t>(pg) << 8 | static_cast<uint32_t>(pb));
-			//point.rgb = *reinterpret_cast<float*>(&rgb);
-	    	point_cloud_rgb->points.push_back(point);
-		}
-	}
-		
-	point_cloud_rgb->width = (int)depth_image.cols; // / focal_length; //(int)point_cloud_rgb->points.size();
-	point_cloud_rgb->height = (int)depth_image.rows; // / focal_length; // 1;
-
-	return point_cloud_rgb;
-}
-
-pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr concatPointClouds(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr model_cloud, 
-		pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud, pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals) { 
-	return 0;
-	//return pcl::concatenateFields<pcl::PointXYZRGB, pcl::PointNormal, pcl::PointXYZRGBNormal>(point_cloud, cloud_normals, model_cloud);
-	
-	//model_cloud		PointXYZRGBNormal
-    //point_cloud		PointXYZRGB
-	//cloud_normals		PointNormal
-	//return 	PointXYZRGBNormal
-}
-////////////////////////
-
-
 template<class T>
 typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointCloud<T>::Ptr cloud, const Eigen::Matrix4f& transform) {
     typename pcl::PointCloud<T>::Ptr transformed_cloud(new typename pcl::PointCloud<T>());
@@ -190,7 +119,6 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		pcl::copyPointCloud(*cloudNormals, *copyCloudNormals);
 	    std::vector<int> indices;
 		pcl::removeNaNFromPointCloud(*copyCloudNormals, *filteredCloudNormals, indices);
-	
 		
 		// OLD CODE		
 		// remove NaN points from the point cloud
@@ -213,7 +141,8 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		//*modelCloud += *cloudWithNormals;
 		
 		// Pass filtered result to transformPointCloudNormals()
-		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud = transformPointCloudNormals(filteredCloudNormals, cameraPose);
+		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud(new pcl::PointCloud<pcl::PointNormal>);
+		newPointCloud = transformPointCloudNormals(filteredCloudNormals, cameraPose);
 		pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr copiedCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 		pcl::copyPointCloud(*newPointCloud, *copiedCloud);
 		*modelCloud += *copiedCloud;
