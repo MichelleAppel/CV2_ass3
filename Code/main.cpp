@@ -202,20 +202,17 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
-			//pcl::Poisson<PointNT>::performReconstruction(pointCloud, std::vector< pcl::Vertices)	
 			
 			//pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
 		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);  
 		  
-			
-			
 			//pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
         	//pcl::copyPointCloud<pcl::PointXYZRGBNormal, pcl::PointNormal>(*pointCloud, *cloudNormals);
 			
 			//PointCloud<PointNormal>::Ptr cloud_smoothed_normals(new PointCloud<PointNormal>());
 			//concatenateFields(*filtered, *cloud_normals, *cloud_smoothed_normals);
 			
-		    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>); // Output datasets
+		    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
 		    pcl::copyPointCloud(*pointCloud, *cloudNormals);
 	
 			pcl::Poisson<pcl::PointNormal> poisson;
@@ -227,27 +224,12 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 		  	//poisson.setSamplesPerNode(10);
 			poisson.reconstruct(triangles);
 			
-			//template<class T>
-			//std::pair<typename pcl::PointCloud<T>::Ptr, std::vector<pcl::Vertices> > 
-			//trianglulate_mesh_poisson(const typename pcl::PointCloud<T>::ConstPtr &cloud, 
-			//                          const int depth) 
-			//{ 
-			//  typename pcl::PointCloud<T>::Ptr vertices(new pcl::PointCloud<T>()); 
-			//  std::vector<pcl::Vertices> faces; 
-			//  typename pcl::Poisson<T> poisson; 
-			//  poisson.setDepth(depth); 
-			//  poisson.setInputCloud(cloud); 
-			//  poisson.setSearchMethod(get_search_kdtree<T>(cloud)); 
-			////  poisson.reconstruct(*mesh); 
-			//  poisson.reconstruct(*vertices, faces); 
-			//  return std::pair<typename pcl::PointCloud<T>::Ptr, std::vector<pcl::Vertices> >(vertices, faces); 
-			//} 
-			
-		
-			            
 			break;
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
+		
+			pcl::MarchingCubes<pcl::PointNormal> marching_cubes;
+		
             break;
     }
     return triangles;
@@ -300,8 +282,8 @@ int main(int argc, char *argv[]) {
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
     // Add colored point cloud to viewer, because it does not support colored meshes
-    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
-    viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
+    //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
+    //viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
 
     // Add mesh
     viewer->setBackgroundColor(1, 1, 1);
