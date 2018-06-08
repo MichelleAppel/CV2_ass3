@@ -227,8 +227,29 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			break;
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
+			
+	    	//pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+	    	//pcl::copyPointCloud(*pointCloud, *cloudNormals);
+
+			//pcl::MarchingCubes<pcl::PointNormal> marchingCubes;
+			//marchingCubes.setDepth(8);
+			//marchingCubes.setSolverDivide(8);
+			//marchingCubes.setIsoDivide(8);
+			//marchingCubes.setPointWeight(4.0f);
+			//marchingCubes.setInputCloud(cloudNormals); // cloudUpsampledNormals
+	  		////marchingCubes.setSamplesPerNode(10);
+			//marchingCubes.reconstruct(triangles);
 		
-			//pcl::MarchingCubes<pcl::PointNormal> marching_cubes;
+	    	pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+	    	pcl::copyPointCloud(*pointCloud, *cloudNormals);
+		
+			pcl::KdTree<PointNormal>::Ptr searchTree(new pcl::KdTree<PointNormal>);
+		    searchTree->setInputCloud(cloudNormals);
+			
+			pcl::MarchingCubesRBF<PointNormal> marchingCubes;
+		    marchingCubes.setInputCloud(cloudNormals);
+		    marchingCubes.setSearchMethod(searchTree);
+		    marchingCubes.reconstruct(*triangles);
 		
             break;
     }
@@ -282,8 +303,8 @@ int main(int argc, char *argv[]) {
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
     // Add colored point cloud to viewer, because it does not support colored meshes
-    //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
-    //viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
+    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
+    viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
 
     // Add mesh
     viewer->setBackgroundColor(1, 1, 1);
