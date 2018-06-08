@@ -226,34 +226,34 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			break;
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
-			
-	    	//pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
-	    	//pcl::copyPointCloud(*pointCloud, *cloudNormals);
 
-			//pcl::MarchingCubes<pcl::PointNormal> marchingCubes;
-			//marchingCubes.setDepth(8);
-			//marchingCubes.setSolverDivide(8);
-			//marchingCubes.setIsoDivide(8);
-			//marchingCubes.setPointWeight(4.0f);
-			//marchingCubes.setInputCloud(cloudNormals); // cloudUpsampledNormals
-	  		////marchingCubes.setSamplesPerNode(10);
-			//marchingCubes.reconstruct(triangles);
 		
-			pcl::search::KdTree<pcl::PointNormal>::Ptr tree(new pcl::search::KdTree<pcl::PointNormal>);
-		    tree->setInputCloud(cloudNormals);
+			//pcl::search::KdTree<pcl::PointNormal>::Ptr tree(new pcl::search::KdTree<pcl::PointNormal>);
+		    //tree->setInputCloud(cloudNormals);
+		    //marchingCubes.setSearchMethod(searchTree);
 			
 			//pcl::MarchingCubesHoppe<pcl::PointNormal>::Ptr marchingCubes(new pcl::MarchingCubesHoppe<pcl::PointNormal>);
 			
-			pcl::MarchingCubes<pcl::PointNormal> *marchingCubes;
-			marchingCubes = new pcl::MarchingCubesHoppe<pcl::PointNormal>();				  
-				  
-		    //marchingCubes.setInputCloud(cloudNormals);
-		    //marchingCubes.setSearchMethod(searchTree);
-			marchingCubes->setIsoLevel(0.0f);
-			marchingCubes->setGridResolution(50, 50, 50);
-			marchingCubes->setPercentageExtendGrid(0.0f);
-		    marchingCubes->setInputCloud(cloudNormals);
-		    marchingCubes->reconstruct(triangles);		
+			
+			//pcl::MarchingCubes<pcl::PointNormal> *marchingCubes;
+			//marchingCubes = new pcl::MarchingCubesHoppe<pcl::PointNormal>();				  
+			//marchingCubes->setIsoLevel(0.0f);
+			//marchingCubes->setGridResolution(50, 50, 50);
+			//marchingCubes->setPercentageExtendGrid(0.0f);
+		    //marchingCubes->setInputCloud(cloudNormals);
+		    //marchingCubes->reconstruct(triangles);
+			
+			
+			pcl::MarchingCubesHoppe<pcl::PointNormal> marchingCubes;
+			//marchingCubes = new pcl::MarchingCubesHoppe<pcl::PointNormal>();				  
+			marchingCubes.setIsoLevel(0.0f);
+			marchingCubes.setGridResolution(50, 50, 50);
+			marchingCubes.setPercentageExtendGrid(0.0f);
+		    marchingCubes.setInputCloud(cloudNormals);
+		    marchingCubes.reconstruct(triangles);
+			
+			
+				
 		
             break;
     }
