@@ -194,6 +194,8 @@ enum CreateMeshMethod { PoissonSurfaceReconstruction = 0, MarchingCubes = 1};
 // Create mesh from point cloud using one of above methods
 pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCloud, CreateMeshMethod method) {
     std::cout << "Creating meshes" << std::endl;
+	
+	// TODO: This 3D model may have holes on the part where there is no camera view. You are expected to fill the holes.
 
     // The variable for the constructed mesh
     pcl::PolygonMesh triangles;
@@ -213,8 +215,27 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			poisson.setSolverDivide(8);
 			poisson.setIsoDivide(8);
 			poisson.setPointWeight(4.0f);
-			poisson.setInputCloud(cloudNormals);
+			poisson.setInputCloud(cloudNormals); // cloudUpsampledNormals
+		  	//poisson.setSamplesPerNode(10);
 			poisson.reconstruct(triangles);
+			
+			//template<class T>
+			//std::pair<typename pcl::PointCloud<T>::Ptr, std::vector<pcl::Vertices> > 
+			//trianglulate_mesh_poisson(const typename pcl::PointCloud<T>::ConstPtr &cloud, 
+			//                          const int depth) 
+			//{ 
+			//  typename pcl::PointCloud<T>::Ptr vertices(new pcl::PointCloud<T>()); 
+			//  std::vector<pcl::Vertices> faces; 
+			//  typename pcl::Poisson<T> poisson; 
+			//  poisson.setDepth(depth); 
+			//  poisson.setInputCloud(cloud); 
+			//  poisson.setSearchMethod(get_search_kdtree<T>(cloud)); 
+			////  poisson.reconstruct(*mesh); 
+			//  poisson.reconstruct(*vertices, faces); 
+			//  return std::pair<typename pcl::PointCloud<T>::Ptr, std::vector<pcl::Vertices> >(vertices, faces); 
+			//} 
+			
+		
 			            
 			break;
         case MarchingCubes:
