@@ -199,6 +199,8 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 
     // The variable for the constructed mesh
     pcl::PolygonMesh triangles;
+    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
+    pcl::copyPointCloud(*pointCloud, *cloudNormals);
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
@@ -212,9 +214,6 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			//PointCloud<PointNormal>::Ptr cloud_smoothed_normals(new PointCloud<PointNormal>());
 			//concatenateFields(*filtered, *cloud_normals, *cloud_smoothed_normals);
 			
-		    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
-		    pcl::copyPointCloud(*pointCloud, *cloudNormals);
-	
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
 			poisson.setSolverDivide(8);
@@ -239,9 +238,6 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			//marchingCubes.setInputCloud(cloudNormals); // cloudUpsampledNormals
 	  		////marchingCubes.setSamplesPerNode(10);
 			//marchingCubes.reconstruct(triangles);
-		
-	    	pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
-	    	pcl::copyPointCloud(*pointCloud, *cloudNormals);
 		
 			pcl::KdTree<PointNormal>::Ptr searchTree(new pcl::KdTree<PointNormal>);
 		    searchTree->setInputCloud(cloudNormals);
