@@ -155,6 +155,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 	
     switch (method) {
         case PoissonSurfaceReconstruction:
+		{
             // Poisson Surface Reconstruction
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
@@ -164,6 +165,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			poisson.setInputCloud(cloudNormals);
 			poisson.reconstruct(triangles);
 			break;
+		}
         case MarchingCubes:
             // Marching Cubes Surface Reconstruction
 			pcl::MarchingCubesHoppe<pcl::PointNormal> marchingCubes;
