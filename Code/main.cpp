@@ -201,59 +201,29 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
     pcl::PolygonMesh triangles;
     pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
     pcl::copyPointCloud(*pointCloud, *cloudNormals);
+	
     switch (method) {
         case PoissonSurfaceReconstruction:
             // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
-			
-			//pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
-		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);  
-		  
-			//pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
-        	//pcl::copyPointCloud<pcl::PointXYZRGBNormal, pcl::PointNormal>(*pointCloud, *cloudNormals);
-			
-			//PointCloud<PointNormal>::Ptr cloud_smoothed_normals(new PointCloud<PointNormal>());
-			//concatenateFields(*filtered, *cloud_normals, *cloud_smoothed_normals);
-			
+						
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
 			poisson.setSolverDivide(8);
 			poisson.setIsoDivide(8);
 			poisson.setPointWeight(4.0f);
-			poisson.setInputCloud(cloudNormals); // cloudUpsampledNormals
-		  	//poisson.setSamplesPerNode(10);
+			poisson.setInputCloud(cloudNormals);
 			poisson.reconstruct(triangles);
 			
 			break;
         case MarchingCubes:
-            // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
-
-		
-			//pcl::search::KdTree<pcl::PointNormal>::Ptr tree(new pcl::search::KdTree<pcl::PointNormal>);
-		    //tree->setInputCloud(cloudNormals);
-		    //marchingCubes.setSearchMethod(searchTree);
-			
-			//pcl::MarchingCubesHoppe<pcl::PointNormal>::Ptr marchingCubes(new pcl::MarchingCubesHoppe<pcl::PointNormal>);
-			
-			
-			//pcl::MarchingCubes<pcl::PointNormal> *marchingCubes;
-			//marchingCubes = new pcl::MarchingCubesHoppe<pcl::PointNormal>();				  
-			//marchingCubes->setIsoLevel(0.0f);
-			//marchingCubes->setGridResolution(50, 50, 50);
-			//marchingCubes->setPercentageExtendGrid(0.0f);
-		    //marchingCubes->setInputCloud(cloudNormals);
-		    //marchingCubes->reconstruct(triangles);
-			
+            // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.		
 			
 			pcl::MarchingCubesHoppe<pcl::PointNormal> marchingCubes;
-			//marchingCubes = new pcl::MarchingCubesHoppe<pcl::PointNormal>();				  
 			marchingCubes.setIsoLevel(0.0f);
 			marchingCubes.setGridResolution(50, 50, 50);
 			marchingCubes.setPercentageExtendGrid(0.0f);
 		    marchingCubes.setInputCloud(cloudNormals);
 		    marchingCubes.reconstruct(triangles);
-			
-			
-				
 		
             break;
     }
@@ -307,8 +277,8 @@ int main(int argc, char *argv[]) {
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
     // Add colored point cloud to viewer, because it does not support colored meshes
-    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
-    viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
+    //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
+    //viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
 
     // Add mesh
     viewer->setBackgroundColor(1, 1, 1);
