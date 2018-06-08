@@ -31,7 +31,6 @@
 #include <typeinfo>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_mat, const float focal_length, const float max_depth) {
-	cout << "mat2IntegralPointCloud" << "\n";
     // This function converts a depth image to a point cloud
     assert(depth_mat.type() == CV_16U);
     pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -58,7 +57,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr mat2IntegralPointCloud(const cv::Mat& depth_
 
 
 pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
-	cout << "computeNormals" << "\n";
     // This function computes normals given a point cloud
     // !! Please note that you should remove NaN values from the pointcloud after computing the surface normals.
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals(new pcl::PointCloud<pcl::PointNormal>); // Output datasets
@@ -73,7 +71,6 @@ pcl::PointCloud<pcl::PointNormal>::Ptr computeNormals(pcl::PointCloud<pcl::Point
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const Eigen::Matrix4f& transform) {
-	cout << "transformPointCloud" << "\n";
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformed_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::transformPointCloud(*cloud, *transformed_cloud, transform);
     return transformed_cloud;
@@ -81,7 +78,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr transformPointCloud(pcl::PointCloud<pcl::
 
 template<class T>
 typename pcl::PointCloud<T>::Ptr transformPointCloudNormals(typename pcl::PointCloud<T>::Ptr cloud, const Eigen::Matrix4f& transform) {
-	cout << "transformPointCloudNormals" << "\n";
     typename pcl::PointCloud<T>::Ptr transformed_cloud(new typename pcl::PointCloud<T>());
     pcl::transformPointCloudWithNormals(*cloud, *transformed_cloud, transform);
     return transformed_cloud;
@@ -99,21 +95,17 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
 		float threshold = 1;
 
-        // TODO(Student): Merge the i-th frame using predicted camera pose to the global point cloud. ~ 20 lines.
+        // Merge the i-th frame using predicted camera pose to the global point cloud
 		
 		// 1.  point cloud <- depthToPointCloud(depth image, focal length)
 		pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloudRGB(new pcl::PointCloud<pcl::PointXYZRGB>());
-		//pointCloud = depthToPointCloud(depthImage, focalLength);
-		//pointCloudRGB = depthToPointCloudRGB(depthImage, focalLength);
 		pointCloud = mat2IntegralPointCloud(depthImage, focalLength, threshold);
 		pcl::copyPointCloud(*pointCloud, *pointCloudRGB);
-		// depthToPointCloud: input cv::Mat and double; returns PointXYZRGB
 		
 		// 2. point cloud with normals <- computeNormals(point cloud)
 	    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
 		cloudNormals = computeNormals(pointCloud);
-		// computeNormals: input PointXYZ; returns PointNormal
 		
 		// Remove NaNs from normals
 	    pcl::PointCloud<pcl::PointNormal>::Ptr filteredCloudNormals(new pcl::PointCloud<pcl::PointNormal>);
@@ -140,11 +132,11 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 		////* cloudWithNormals = pointCloudTrans + cloudNormals
 		//*modelCloud += *cloudWithNormals;
 		
-		// Pass filtered result to transformPointCloudNormals()
-		//pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud(new pcl::PointCloud<pcl::PointNormal>);
+		// Pass the point cloud with normals
 		pcl::PointCloud<pcl::PointNormal>::Ptr newPointCloud(new pcl::PointCloud<pcl::PointNormal>);
 	    pcl::transformPointCloudWithNormals(*filteredCloudNormals, *newPointCloud, cameraPose);
-		//newPointCloud = transformPointCloudNormals(filteredCloudNormals, cameraPose);
+		
+		// Add it to the total cloud
 		pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr copiedCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 		pcl::copyPointCloud(*newPointCloud, *copiedCloud);
 		*modelCloud += *copiedCloud;
@@ -165,7 +157,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointClouds(Frame3D frames[]
 pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointCloudsWithTexture(Frame3D frames[]) {
     pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr modelCloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>);
 
-    for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 8; i++) {
         std::cout << boost::format("Merging frame %d") % i << std::endl;
 
         Frame3D frame = frames[i];
@@ -174,17 +166,7 @@ pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr mergingPointCloudsWithTexture(Frame
         const Eigen::Matrix4f cameraPose = frame.getEigenTransform();
 
         // TODO(Student): The same as mergingPointClouds but now with texturing. ~ 50 lines.
-		
-		//pointCloudTrans = transformPointCloud(modelCloud, cameraPose.inverse()); 
-		//for (int i = 0; i < ; i++) {			
-		//}
-		
-		
-		// TODO: Make sure u,v coordinates are scaled to be from [0, width] and [0, height] but not [0, 1].
-		// TODO: Make sure you rotate a model back to camera coordinate system using a provided pose.
-		
     }
-
     return modelCloud;
 }
 
@@ -195,8 +177,6 @@ enum CreateMeshMethod { PoissonSurfaceReconstruction = 0, MarchingCubes = 1};
 pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCloud, CreateMeshMethod method) {
     std::cout << "Creating meshes" << std::endl;
 	
-	// TODO: This 3D model may have holes on the part where there is no camera view. You are expected to fill the holes.
-
     // The variable for the constructed mesh
     pcl::PolygonMesh triangles;
     pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>);
@@ -204,8 +184,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 	
     switch (method) {
         case PoissonSurfaceReconstruction:
-            // TODO(Student): Call Poisson Surface Reconstruction. ~ 5 lines.
-						
+            // Poisson Surface Reconstruction
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
 			poisson.setSolverDivide(8);
@@ -213,18 +192,15 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			poisson.setPointWeight(4.0f);
 			poisson.setInputCloud(cloudNormals);
 			poisson.reconstruct(triangles);
-			
 			break;
         case MarchingCubes:
-            // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.		
-			
+            // Marching Cubes Surface Reconstruction
 			pcl::MarchingCubesHoppe<pcl::PointNormal> marchingCubes;
 			marchingCubes.setIsoLevel(0.0f);
 			marchingCubes.setGridResolution(50, 50, 50);
 			marchingCubes.setPercentageExtendGrid(0.0f);
 		    marchingCubes.setInputCloud(cloudNormals);
 		    marchingCubes.reconstruct(triangles);
-		
             break;
     }
     return triangles;
@@ -277,8 +253,8 @@ int main(int argc, char *argv[]) {
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
     // Add colored point cloud to viewer, because it does not support colored meshes
-    //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
-    //viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
+    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
+    viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
 
     // Add mesh
     viewer->setBackgroundColor(1, 1, 1);
