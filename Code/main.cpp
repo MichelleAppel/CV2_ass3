@@ -228,7 +228,7 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
         case MarchingCubes:
             // TODO(Student): Call Marching Cubes Surface Reconstruction. ~ 5 lines.
 		
-			pcl::MarchingCubes<pcl::PointNormal> marching_cubes;
+			//pcl::MarchingCubes<pcl::PointNormal> marching_cubes;
 		
             break;
     }
