@@ -227,7 +227,7 @@ int main(int argc, char *argv[]) {
 
     // Add colored point cloud to viewer, because it does not support colored meshes
     pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal> rgb(texturedCloud);
-    //viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
+    viewer->addPointCloud<pcl::PointXYZRGBNormal>(texturedCloud, rgb, "cloud");
 
     // Add mesh
     viewer->setBackgroundColor(1, 1, 1);
