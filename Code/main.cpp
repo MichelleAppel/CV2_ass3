@@ -252,7 +252,8 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			marchingCubes->setIsoLevel(0.0f);
 			marchingCubes->setGridResolution(50, 50, 50);
 			marchingCubes->setPercentageExtendGrid(0.0f);
-		    marchingCubes.reconstruct(*triangles);		
+		    marchingCubes->setInputCloud(cloudNormals);
+		    marchingCubes->reconstruct(triangles);		
 		
             break;
     }
