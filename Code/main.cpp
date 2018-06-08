@@ -239,8 +239,8 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 	  		////marchingCubes.setSamplesPerNode(10);
 			//marchingCubes.reconstruct(triangles);
 		
-			pcl::KdTree<pcl::PointNormal>::Ptr searchTree(new pcl::KdTree<pcl::PointNormal>);
-		    searchTree->setInputCloud(cloudNormals);
+			pcl::KdTree<pcl::PointNormal>::Ptr tree(new pcl::KdTree<pcl::PointNormal>);
+		    tree->setInputCloud(cloudNormals);
 			
 			pcl::MarchingCubesRBF<PointNormal> marchingCubes;
 		    marchingCubes.setInputCloud(cloudNormals);
