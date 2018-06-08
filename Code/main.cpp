@@ -207,9 +207,17 @@ pcl::PolygonMesh createMesh(pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr pointCl
 			//pcl::PointCloud<pcl::PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<pcl::PointNormal>);
 		  	//pcl::fromPCLPointCloud2(*pointCloud, *xyz_cloud);  
 		  
-			pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
-        	pcl::copyPointCloud<pcl::PointXYZRGBNormal, pcl::PointNormal>(*pointCloud, *cloudNormals);
 			
+			
+			//pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(pcl::PointCloud<pcl::PointNormal>);
+        	//pcl::copyPointCloud<pcl::PointXYZRGBNormal, pcl::PointNormal>(*pointCloud, *cloudNormals);
+			
+			//PointCloud<PointNormal>::Ptr cloud_smoothed_normals(new PointCloud<PointNormal>());
+			//concatenateFields(*filtered, *cloud_normals, *cloud_smoothed_normals);
+			
+		    pcl::PointCloud<pcl::PointNormal>::Ptr cloudNormals(new pcl::PointCloud<pcl::PointNormal>); // Output datasets
+		    pcl::copyPointCloud(*pointCloud, *cloudNormals);
+	
 			pcl::Poisson<pcl::PointNormal> poisson;
 			poisson.setDepth(8);
 			poisson.setSolverDivide(8);
